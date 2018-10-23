@@ -17,8 +17,8 @@ BreakConstructorInitializersBeforeComma: "true"
 Standard: "Cpp11"
 PointerAlignment: "Left"
 DerivePointerAlignment: "false"
-AlignConsecutiveDeclarations: "true"
-AlignConsecutiveAssignments: "true"
+AlignConsecutiveDeclarations: "false"
+AlignConsecutiveAssignments: "false"
 ColumnLimit: 80
 ContinuationIndentWidth: 3
 KeepEmptyLinesAtTheStartOfBlocks: "true"
