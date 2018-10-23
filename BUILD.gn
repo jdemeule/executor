@@ -1,0 +1,8 @@
+executable("executor") {
+  sources = [
+    "main.cpp",
+  ]
+
+  deps = [
+  ]
+}

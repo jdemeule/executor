@@ -1,0 +1,69 @@
+declare_args() {
+  is_debug = true
+  is_clang = true
+  is_lto = false
+}
+
+declare_args() {
+  ar = "ar"
+}
+# Platform detection
+if (target_os == "") {
+  target_os = host_os
+}
+if (current_os == "") {
+  current_os = target_os
+}
+is_android = current_os == "android"
+is_linux = current_os == "linux"
+is_linux_host = host_os == "linux"
+is_mac = current_os == "mac"
+
+if (target_cpu == "") {
+  target_cpu = host_cpu
+  if (is_android) {
+    target_cpu = "arm"
+  }
+}
+if (current_cpu == "") {
+  current_cpu = target_cpu
+}
+
+
+# TODO: this is not under //gn/standalone anymore
+default_configs = [
+  "//build:debug_symbols",
+  "//build:default",
+  "//build:c++17",
+  "//build:extra_warnings",
+#  "//build:no_exceptions",
+#  "//build:no_rtti",
+#  "//build:visibility_hidden",
+#  "//build/libc++:config",
+#  "//build/sanitizers:sanitizers_cflags",
+]
+
+if (!is_debug) {
+  default_configs -= [ "//build:debug_symbols" ]
+  default_configs += [ "//build:release" ]
+}
+set_defaults("source_set") {
+  configs = default_configs
+}
+set_defaults("static_library") {
+  configs = default_configs
+}
+
+# Realistically the only shared_library that we build right now is libc++.so
+# when use_custom_libcxx=true (on Linux). Hence don't add a dependency on
+# libc++ itself on these targets.
+set_defaults("shared_library") {
+  configs = default_configs
+  configs += [ "//build:shared_library" ]
+}
+set_defaults("executable") {
+  configs = default_configs
+  configs += [ "//build:executable" ]
+}
+set_default_toolchain("//build/toolchain:gcc_like")
+host_toolchain = "//build/toolchain:gcc_like_host"
